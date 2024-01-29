@@ -1,0 +1,25 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: 'Build app'
+      run: 'docker build -t app .'
+  
+    - name: 'Migrations'
+      run: 'docker run app python3 manage.py migrate'
+  
+    - name: 'Testing'
+      run: 'docker run app python3 manage.py test'
